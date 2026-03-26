@@ -17,9 +17,17 @@
 서로 다른 옷의 조합의 수를 return.
 
 [핵심 수학 원리]
-    각 종류별로 "안 입는 경우"를 포함하면 (개수 + 1)가지 선택지가 있다.
-    모든 종류의 선택지를 곱한 뒤, 아무것도 안 입는 경우 1가지를 빼면 된다.
-    예: 얼굴(2+1) × 상의(1+1) × 하의(1+1) × 겉옷(1+1) - 1 = 3×2×2×2 - 1 = 23
+    1. 반드시 둘 다 입는 경우만 셀 때:
+       → 그냥 각 종류의 개수를 곱하면 된다.
+       → 예: 모자 2개 × 안경 1개 = 2가지 (A+C, B+C)
+
+    2. 안 입어도 되는 경우까지 셀 때 (이 문제!):
+       → 각 종류마다 "안 입는다"는 선택지를 하나 추가 → (개수 + 1)
+       → 종류끼리 동시에 고르는 거니까 전부 곱하기
+       → 마지막에 전부 안 입는 경우 1가지를 빼기 (-1)
+       → 예: 모자(2+1) × 안경(1+1) - 1 = 3×2 - 1 = 5
+
+    공식: (종류1 개수+1) × (종류2 개수+1) × ... - 1
 
 [제한사항]
 - clothes의 각 행은 [의상의 이름, 의상의 종류]
@@ -33,7 +41,7 @@ from math import prod
 
 
 # ============================================================
-# 풀이 1: Counter 사용
+# 풀이 1: Counter 사용 ⭐ 출제 의도에 가장 부합
 # ------------------------------------------------------------
 # 핵심 아이디어:
 #   Counter로 종류별 의상 개수를 세고,
@@ -42,10 +50,13 @@ from math import prod
 # ============================================================
 def solution1(clothes):
     # 종류(type)별 개수 세기
+    # Counter 각 요소가 몇개인지 세주는 클래스. 리스트나 튜플을 넣으면 요소별로 개수를 세서 딕셔너리 형태로 반환한다.
     counts = Counter([cloth_type for _, cloth_type in clothes])
+    # counts = Counter({'headgear': 2, 'eyewear': 1})
 
     result = 1
     for count in counts.values():
+        print(count)
         result *= (count + 1)  # 각 종류별 "안 입는 경우" 포함
 
     return result - 1  # 아무것도 안 입는 경우 제외
@@ -134,13 +145,8 @@ if __name__ == "__main__":
 
     for name, func in solutions:
         print(f"--- {name} ---")
-        all_passed = True
         for clothes, expected in test_cases:
             result = func(clothes)
             status = "PASS" if result == expected else "FAIL"
-            if status == "FAIL":
-                all_passed = False
-                print(f"  {status}: {clothes} → {result} (expected {expected})")
-        if all_passed:
-            print("  ALL PASSED!")
+            print(f"  {status}: result={result}, expected={expected}")
         print()

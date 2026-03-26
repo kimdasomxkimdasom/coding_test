@@ -29,13 +29,15 @@
 #   문자열을 사전순으로 정렬하면, 접두어 관계에 있는 번호는
 #   반드시 인접하게 배치된다. (예: "119" < "1195524421" < "12...")
 #   따라서 정렬 후 바로 옆 번호만 비교하면 충분하다.
-# 시간복잡도: O(n log n) (정렬) / 공간복잡도: O(1) (제자리 정렬)
+# 시간복잡도: O(n log n) (정렬)
+# 공간복잡도: O(1) (제자리 정렬)
 # ============================================================
 def solution1(phone_book):
     phone_book.sort()
 
+    # phon_book의 길이만큼 반복하되, i + 1이 범위를 벗어나지 않도록 len(phone_book) - 1까지
     for i in range(len(phone_book) - 1):
-        # 현재 번호가 다음 번호의 접두어인지 확인
+        # 현재 번호가 다음 번호의 접두어인지 확인 startswith() 메서드 사용
         if phone_book[i + 1].startswith(phone_book[i]):
             return False
 
@@ -43,18 +45,19 @@ def solution1(phone_book):
 
 
 # ============================================================
-# 풀이 2: 해시맵(딕셔너리) 사용
+# 풀이 2: 해시맵(딕셔너리) 사용 ⭐ 출제 의도에 가장 부합
 # ------------------------------------------------------------
 # 핵심 아이디어:
 #   모든 번호를 해시맵에 넣은 뒤, 각 번호를 한 글자씩 잘라가며
 #   접두어가 해시맵에 존재하는지 확인한다.
-#   → 해시 카테고리 문제이므로 이 접근이 출제 의도에 가장 부합.
+#   → 해시 카테고리 문제이므로 이 접근이 출제 의도에 가장 부합
 # 시간복잡도: O(n * m) (n: 번호 개수, m: 번호 최대 길이)
 # 공간복잡도: O(n)
 # ============================================================
 def solution2(phone_book):
     # 모든 번호를 해시맵에 등록
-    hash_map = dict.fromkeys(phone_book, True)
+    # 키 목록으로 딕셔너리를 만들면 조회가 O(1)로 빠르다.
+    hash_map = dict.fromkeys(phone_book, True) # {'119': True, '97674223': True, '1195524421': True}
 
     for phone_number in phone_book:
         prefix = ""
@@ -109,13 +112,8 @@ if __name__ == "__main__":
 
     for name, func in solutions:
         print(f"--- {name} ---")
-        all_passed = True
         for phone_book, expected in test_cases:
             result = func(phone_book[:])  # 원본 보존을 위해 복사본 전달 (풀이1이 sort함)
             status = "PASS" if result == expected else "FAIL"
-            if status == "FAIL":
-                all_passed = False
-                print(f"  {status}: {phone_book} → {result} (expected {expected})")
-        if all_passed:
-            print("  ALL PASSED!")
+            print(f"  {status}: result={result}, expected={expected}")
         print()

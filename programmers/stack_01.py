@@ -60,7 +60,7 @@ def solution2(arr):
 
 
 # ============================================================
-# 풀이 3: 스택(Stack) 활용
+# 풀이 3: 스택(Stack) 활용 ⭐ 출제 의도에 가장 부합
 # ------------------------------------------------------------
 # 핵심 아이디어:
 #   풀이 2와 원리는 같지만, 리스트를 "스택"으로 바라보는 관점.
@@ -115,13 +115,8 @@ if __name__ == "__main__":
 
     for name, func in solutions:
         print(f"--- {name} ---")
-        all_passed = True
         for arr, expected in test_cases:
             result = func(arr)
             status = "PASS" if result == expected else "FAIL"
-            if status == "FAIL":
-                all_passed = False
-                print(f"  {status}: {arr} → {result} (expected {expected})")
-        if all_passed:
-            print("  ALL PASSED!")
+            print(f"  {status}: result={result}, expected={expected}")
         print()

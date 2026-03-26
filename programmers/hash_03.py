@@ -62,7 +62,7 @@ def solution1(genres, plays):
 
 
 # ============================================================
-# 풀이 2: 총 재생횟수를 미리 계산 (개선된 버전)
+# 풀이 2: 총 재생횟수를 미리 계산 (개선된 버전) ⭐ 출제 의도에 가장 부합
 # ------------------------------------------------------------
 # 핵심 아이디어:
 #   genre_total 딕셔너리에 장르별 총 재생횟수를 미리 누적해두어,
@@ -79,6 +79,7 @@ def solution2(genres, plays):
         genre = genres[i]
         play = plays[i]
 
+        # 장르별 노래 목록 업데이트
         if genre not in genre_songs:
             genre_songs[genre] = []
         genre_songs[genre].append((play, i))
@@ -89,7 +90,12 @@ def solution2(genres, plays):
 
     for genre in sorted_genres:
         songs = genre_songs[genre]
+        # 재생횟수 내림차순 → 같으면 고유번호 오름차순
+        # x[0]은 재생횟수, x[1]은 고유번호
+        # -x[0]으로 내림차순, x[1]으로 오름차순 정렬
         songs.sort(key=lambda x: (-x[0], x[1]))
+
+        # 최대 2곡만 수록
         result.extend([idx for _, idx in songs[:2]])
 
     return result
@@ -165,13 +171,8 @@ if __name__ == "__main__":
 
     for name, func in solutions:
         print(f"--- {name} ---")
-        all_passed = True
         for genres, plays, expected in test_cases:
             result = func(genres, plays)
             status = "PASS" if result == expected else "FAIL"
-            if status == "FAIL":
-                all_passed = False
-                print(f"  {status}: {genres} → {result} (expected {expected})")
-        if all_passed:
-            print("  ALL PASSED!")
+            print(f"  {status}: result={result}, expected={expected}")
         print()
