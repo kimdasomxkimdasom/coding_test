@@ -1,0 +1,10 @@
+{
+    "python.defaultInterpreterPath": "python",
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "python": "python -u"
+    },
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "files.trimTrailingWhitespace": true
+}
